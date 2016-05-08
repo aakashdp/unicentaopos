@@ -1,0 +1,26 @@
+import com.openbravo.format.Formats;
+import com.openbravo.pos.ticket.CategoryInfo;
+import com.openbravo.pos.forms.DataLogicSales;
+import com.openbravo.pos.forms.DataLogicSystem;
+import com.openbravo.data.loader.Session;
+import java.util.Properties;
+ 
+Session session = new Session(dbURL, dbUser, dbPassword);
+DataLogicSales logicsale = new DataLogicSales();
+logicsale.init(session);
+String productCat = line.getProductCategoryID();
+
+if (productCat != null) {
+
+    CategoryInfo catInfo=logicsale.getCategoryInfo(productCat);
+
+    if (catInfo.getTextTip().substring(0,3).equals("AGE")){
+        String yrs = catInfo.getTextTip().substring(3,5);
+
+        if (ticket.getProperty("minAge") == null || Integer.parseInt(ticket.getProperty("minAge")) < Integer.parseInt(yrs) ) {
+            javax.swing.JOptionPane.showMessageDialog(null, "Check ID!!! Min Age for Sale is: " + yrs + " Years", "AGE CHECK", JOptionPane.WARNING_MESSAGE);
+            ticket.setProperty("minAge",yrs);
+        }
+
+    }
+}
